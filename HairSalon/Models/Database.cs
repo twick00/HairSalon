@@ -1,6 +1,6 @@
+using HairSalon;
 using System;
 using MySql.Data.MySqlClient;
-using HairSalon;
 
 namespace HairSalon.Models
 {
