@@ -8,13 +8,19 @@ namespace HairSalon.Models
     {
         private int _id;
         private string _name;
+        private static List<Client> _allClients;
+        public int Id { get => _id;}
+        private int _Id { set => _id = value;}
+        public string Name { get => _name;}
+        private string _Name { set => _name = value; }
+
         public Client(string name, int id = 0, bool save = false)
         {
-            this._name = name;
-            this._id = id;
+            this._Name = name;
+            this._Id = id;
             if (save)
             {
-            Save();
+                Save();
             }
         }
         public void Save()
@@ -25,10 +31,10 @@ namespace HairSalon.Models
             cmd.CommandText = @"INSERT INTO client (name) VALUES (@clientName);";
             MySqlParameter clientName = new MySqlParameter();
             clientName.ParameterName = "@clientName";
-            clientName.Value = this._name;
+            clientName.Value = this.Name;
             cmd.Parameters.Add(clientName);
             cmd.ExecuteNonQuery();
-            _id = (int) cmd.LastInsertedId;
+            _Id = (int) cmd.LastInsertedId;
             conn.Close();
             if(conn != null)
             {
@@ -38,6 +44,17 @@ namespace HairSalon.Models
         public static void DeleteAll()
         {
             
+        }
+        public static Client FindClient(int id)
+        {
+            foreach(Client client in _allClients)
+            {
+                if (client._id == id)
+                {
+                    return client;
+                }
+            }
+            return null;
         }
         public static List<Client> GetAllClients()
         {
@@ -54,6 +71,8 @@ namespace HairSalon.Models
                 Client newClient = new Client(name, id);
                 allClients.Add(newClient);
             }
+            _allClients = allClients;
+            Client_Stylist.SetClient(allClients);
             return  allClients;
         }
     }

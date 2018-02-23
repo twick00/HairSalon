@@ -1,0 +1,19 @@
+<div class="container">
+    @if (Model != null)
+    {
+        @if (Model.GetType() == typeof(Client))
+        {
+            <h4>Client: @Model.Name</h4>
+        }
+        else if (Model.GetType() == typeof(Stylist))
+        {
+            <h4>Stylist: @Model.Name</h4>
+        }
+        else {
+            <h4>Oops</h4>
+        }
+    } 
+    else {
+        <h4>Sorry, that could not be found.</h4>
+    }
+</div>

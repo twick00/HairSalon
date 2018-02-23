@@ -1,3 +1,38 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+<div class="container">
+    @if (ViewBag.Stylists != null)
+    {
+    <div class="col">
+        <h3>Stylists: </h3>
+        <ul>
+        @foreach(var Stylist in ViewBag.Stylists)
+        {
+            <li><a href="/stylist/@Stylist.Id">@Stylist.Name</a></li>
+        }
+        </ul>
+    </div>
+    } else {
+        <div class="col">
+        <h3>No Stylists to show</h3>
+        </div>
+    }
+    @if (ViewBag.Clients != null)
+    {
+    <div class="col">
+        <h3>Clients: </h3>
+        <ul>
+            @foreach(var Client in ViewBag.Clients)
+            {
+                <li><a href="/client/@Client.Id">@Client.Name</a></li>
+            }
+        </ul>
+    </div>
+    } else {
+        <div class="col">
+        <h3>No Clients to show</h3>
+        </div>
+    }
+</div>
