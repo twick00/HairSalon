@@ -35,7 +35,11 @@ namespace HairSalon.Models
                 conn.Dispose();
             }
         }
-        public List<Client> GetAllClients()
+        public static void DeleteAll()
+        {
+            
+        }
+        public static List<Client> GetAllClients()
         {
             List<Client> allClients = new List<Client> {};
             MySqlConnection conn = DB.Connection();
