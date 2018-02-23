@@ -10,19 +10,18 @@ namespace HairSalon.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        [HttpGet("/")]
+        public IActionResult Index() => View();
 
-        public IActionResult About()
+
+        public IActionResult Clients()
         {
             ViewData["Message"] = "Your application description page.";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Stylists()
         {
             ViewData["Message"] = "Your contact page.";
 
