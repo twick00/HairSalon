@@ -5,12 +5,25 @@
 <div class="container">
     @if (ViewBag.Stylists != null)
     {
-    <div class="col">
+    <div class="col-md-6">
         <h3>Stylists: </h3>
-        <ul>
+        <ul class="list-group">
         @foreach(var Stylist in ViewBag.Stylists)
         {
-            <li><a href="/stylist/@Stylist.Id">@Stylist.Name</a></li>
+            <li class="list-group-item">
+            <button class="btn btn-primary btn-xs push-right" type="button" data-toggle="collapse" data-target="#collapse-stylist-@Stylist.Id" aria-expanded="false" aria-controls="collapseExample">Show Stylists</button>
+                <a href="/stylist/@Stylist.Id">@Stylist.Name</a>
+                    <div class="collapse" id="collapse-stylist-@Stylist.Id">
+                        <div class="well">
+                        <ul class="list-group">
+                          @foreach(var Client in Stylist.linkedClients())
+                          {
+                              <li class="list-group-item">@Client.Name</li>
+                          }
+                        </ul>
+                        </div>
+                    </div>
+                </li>
         }
         </ul>
     </div>
@@ -21,12 +34,25 @@
     }
     @if (ViewBag.Clients != null)
     {
-    <div class="col">
+    <div class="col-md-6">
         <h3>Clients: </h3>
-        <ul>
+        <ul class="list-group">
             @foreach(var Client in ViewBag.Clients)
             {
-                <li><a href="/client/@Client.Id">@Client.Name</a></li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary btn-xs push-right" type="button" data-toggle="collapse" data-target="#collapse-client-@Client.Id" aria-expanded="false" aria-controls="collapseExample">Show Stylists</button>
+                <a href="/client/@Client.Id">@Client.Name<a href="/client/@Client.Id"></a>
+                    <div class="collapse" id="collapse-client-@Client.Id">
+                        <div class="well">
+                        <ul class="list-group">
+                           @foreach(var Stylist in @Client.linkedStylists())
+                           {
+                               <li class="list-group-item">@Stylist.Name</li>
+                           }
+                        </ul>
+                        </div>
+                    </div>
+                </li>
             }
         </ul>
     </div>
@@ -36,3 +62,8 @@
         </div>
     }
 </div>
+<div class="container">
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

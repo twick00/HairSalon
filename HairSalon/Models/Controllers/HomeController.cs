@@ -20,21 +20,20 @@ namespace HairSalon.Controllers
         [HttpGet("/client/{id}")]
         public IActionResult ViewClient(int id)
         {
-            ViewData["Message"] = "Your application description page.";
+
             
             return View("Details",Client.FindClient(id));
         }
         [HttpGet("/stylist/{id}")]
         public IActionResult ViewStylist(int id)
         {
-            ViewData["Message"] = "Your application description page.";
             
             return View("Details",Stylist.FindStylist(id));
         }
 
         public IActionResult ViewStylist()
         {
-            ViewData["Message"] = "Your contact page.";
+
 
             return View(Stylist.GetAllStylist());
         }

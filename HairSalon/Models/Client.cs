@@ -9,6 +9,7 @@ namespace HairSalon.Models
         private int _id;
         private string _name;
         private static List<Client> _allClients;
+        private List<Stylist> _linkedStylists;
         public int Id { get => _id;}
         private int _Id { set => _id = value;}
         public string Name { get => _name;}
@@ -44,6 +45,11 @@ namespace HairSalon.Models
         public static void DeleteAll()
         {
             
+        }
+        public List<Stylist> linkedStylists()
+        {
+            _linkedStylists = Client_Stylist.FindStylistByClientId(this._id);//Issue before here
+            return _linkedStylists;
         }
         public static Client FindClient(int id)
         {
