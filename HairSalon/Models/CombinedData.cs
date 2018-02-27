@@ -7,6 +7,7 @@ namespace HairSalon.Models
 {
     public class Client_Stylist
     {
+
         private static Dictionary<int,List<int>> _stylist_client;
         private static List<Stylist> _allStylists;
         private static List<Client> _allClients;

@@ -6,7 +6,7 @@ namespace HairSalon.Models
 {
     public class Client
     {
-        private int _id;
+        private int _id = 0;
         private string _name;
         private static List<Client> _allClients;
         private List<Stylist> _linkedStylists;
@@ -15,10 +15,9 @@ namespace HairSalon.Models
         public string Name { get => _name;}
         private string _Name { set => _name = value; }
 
-        public Client(string name, int id = 0, bool save = false)
+        public Client(string name, bool save = false)
         {
             this._Name = name;
-            this._Id = id;
             if (save)
             {
                 Save();
@@ -44,8 +43,18 @@ namespace HairSalon.Models
         }
         public static void DeleteAll()
         {
-            
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM `client`;";
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
         }
+
         public List<Stylist> linkedStylists()
         {
             _linkedStylists = Client_Stylist.FindStylistByClientId(this._id);//Issue before here
@@ -74,7 +83,7 @@ namespace HairSalon.Models
             {
                 string name = rdr.GetString(1);
                 int id = rdr.GetInt32(0);
-                Client newClient = new Client(name, id);
+                Client newClient = new Client(name);
                 allClients.Add(newClient);
             }
             _allClients = allClients;

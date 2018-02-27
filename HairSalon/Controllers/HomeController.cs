@@ -13,8 +13,10 @@ namespace HairSalon.Controllers
         [HttpGet("/")]
         public IActionResult Index()
         {
+
             ViewBag.Clients = Client.GetAllClients();
             ViewBag.Stylists = Stylist.GetAllStylist();
+            
             return View();
         }
         [HttpGet("/client/{id}")]
@@ -36,11 +38,6 @@ namespace HairSalon.Controllers
 
 
             return View(Stylist.GetAllStylist());
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
