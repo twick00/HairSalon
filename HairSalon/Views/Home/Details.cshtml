@@ -3,18 +3,28 @@
     {
         @if (Model.GetType() == typeof(Client))
         {
-            <h4>Client: <br>@Model.Name <br>Stylist: @foreach(var stylist in Model.GetStylist()){<p>@stylist.Name</p>}
+            <h4>Client: <span style="color:red">@Model.Name</span> <hr>Stylist: <p></p><br>@foreach(var stylist in Model.GetStylist()){<p>@stylist.Name</p>}
             </h4>
+            <hr>
             <h4>Pick a different Stylist:</h4>
-            foreach(var stylist in ViewBag.Stylists)
+            <form action="/client/editstylist/@Model.Id" method="POST">
+            @foreach(var stylist in ViewBag.Stylists)
             {
-                <a href="/client/editstylist/@Model.Id/@stylist.Id">@stylist.Name</a><br>
+                <input type="radio" name="new-stylist" value="@stylist.Id">  @stylist.Name<br>
+                @*<a href="/client/editstylist/@Model.Id/@stylist.Id">@stylist.Name</a><br>*@
             }
+            <hr>
+            <input type="submit" value="Submit">
+            </form>
         }
         else if (Model.GetType() == typeof(Stylist))
         {
-            <h4>Stylist: @Model.Name</h4>
-        }
+            <h4>Stylist: <span style="color:blue">@Model.Name</span> <hr> Clients:</h4>
+            foreach(var Client in Model.GetClients())
+            {
+                <a href="/client/@Client.Id">@Client.Name</a>
+            }
+        }   
         else {
             <h4>Oops</h4>
         }

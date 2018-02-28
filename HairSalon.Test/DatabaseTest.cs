@@ -50,11 +50,16 @@ namespace HairSalon.Test
         [TestMethod]
         public void TestConnection_ClientTest_FirstID()
         {
-            string name = "";
-            int id = 0;
             MySqlConnection conn = DB.Connection();
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = 
+            @"INSERT INTO `client` (`id`, `name`) VALUES (NULL, 'Tyler Wickline');";
+            cmd.ExecuteNonQuery(); 
+            conn.Close();
+            string name = "";
+            int id = 0;
+            conn.Open();
             cmd.CommandText = @"SELECT * FROM client WHERE name = 'Tyler Wickline';";
             MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
             while(rdr.Read())
@@ -75,11 +80,17 @@ namespace HairSalon.Test
         [TestMethod]
         public void TestConnection_StylistTest_FirstID()
         {
-            string name = "";
-            int id = 0;
             MySqlConnection conn = DB.Connection();
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = 
+            @"INSERT INTO `stylist` (`id`, `name`) VALUES
+                (NULL, 'Max Styles');";
+            cmd.ExecuteNonQuery(); 
+            conn.Close();
+            string name = "";
+            int id = 0;
+            conn.Open();
             cmd.CommandText = @"SELECT * FROM stylist WHERE name = 'Max Styles';";
             MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
             while(rdr.Read())
@@ -96,30 +107,6 @@ namespace HairSalon.Test
             }
             Assert.AreNotEqual(0, id);
             Assert.AreEqual("Max Styles", name);
-        }
-        [TestMethod]
-        public void DeleteAll_RunThisTestLast_ReturnsZero()
-        {
-            int id = 0;
-            string name = "";
-            DeleteAll();
-            MySqlConnection conn = DB.Connection();
-            conn.Open();
-            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"SELECT * FROM stylist;";
-            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
-            while(rdr.Read())
-            {
-                id = rdr.GetInt32(0);
-                name = rdr.GetString(1);
-            }
-            conn.Close();
-            if(conn != null)
-            {
-                conn.Dispose();
-            }
-            Assert.AreEqual(0, id);
-            Assert.AreEqual("", name);
         }
     }
 }

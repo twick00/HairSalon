@@ -55,6 +55,21 @@ namespace HairSalon.Models
                 conn.Dispose();
             }
         }
+        public void DeleteThis()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM `stylist` WHERE id = @thisId;";
+            MySqlParameter thisId = new MySqlParameter("@thisId", this._id);
+            cmd.Parameters.Add(thisId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+        }
 
         public static Stylist FindStylist(int id)
         {
@@ -110,7 +125,6 @@ namespace HairSalon.Models
                 allStylists.Add(newStylist);
             }
             _allStylists = allStylists;
-            Client_Stylist.SetStylist(allStylists);
             conn.Close();
             if(conn != null)
             {

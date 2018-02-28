@@ -1,0 +1,22 @@
+
+<div class="container">
+<form action="/addnew" method="POST">
+    <input type="text" name="name" required value="" placeholder="Enter a full-name">
+    <p></p>
+    <select name="person">
+        <option value="stylist">Stylist</option>
+        <option value="client">Client</option>
+    </select>
+    <br>
+    <p></p>
+    <p>If client, select their stylist:<br> (does nothing otherwise)</p>
+    <select name="stylist">
+    @foreach(var stylist in ViewBag.Stylists)
+    {
+        <option value="@stylist.Id">@stylist.Name</option>
+    }
+    </select>
+    <hr><input type="submit" value="Submit">
+</form>
+
+</div>

@@ -19,6 +19,30 @@ namespace HairSalon.Controllers
             
             return View();
         }
+        [HttpGet("/addnew")]
+        public IActionResult NewPerson()
+        {
+
+            ViewBag.Stylists = Stylist.GetAllStylist();
+            return View();
+        }
+        [HttpPost("/addnew")]
+        public IActionResult PostNewPerson()
+        {
+            if (Request.Form["person"] == "stylist")
+            {
+                Stylist newStylist = new Stylist(Request.Form["name"],0,true);
+            }
+            else if (Request.Form["person"] == "client" && Stylist.GetAllStylist().Count > 0)
+            {
+                Client newClient = new Client(Request.Form["name"],0,true);
+                newClient.NewClientStylistRel(Int32.Parse(Request.Form["stylist"]));
+            }
+            else {
+                return RedirectToAction("PostNewPerson");
+            }
+            return RedirectToAction("Index");
+        }
         [HttpGet("/client/{id}")]
         public IActionResult ViewClient(int id)
         {
@@ -32,17 +56,16 @@ namespace HairSalon.Controllers
             
             return View("Details",Stylist.FindStylist(id));
         }
-        [HttpGet("/client/editstylist/{client_id}/{stylist_id}")]
-        public IActionResult EditClientStylist(int client_id, int stylist_id)
+        [HttpPost("/client/editstylist/{id}")]
+        public IActionResult EditClientStylist(int id)
         {
-            Client.ChangeThisStylist(client_id, stylist_id);
-            return View("Details",client_id);
-        }
-        public IActionResult ViewStylist()
-        {
-
-
-            return View(Stylist.GetAllStylist());
+            if (string.IsNullOrEmpty(Request.Form["new-stylist"]))
+            {
+                return View("Index");
+            }
+            int newStylistId = Int32.Parse(Request.Form["new-stylist"]);
+            Client.ChangeThisStylist(id, newStylistId);
+            return RedirectToAction("Index");
         }
     }
 }

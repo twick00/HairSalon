@@ -14,30 +14,12 @@ namespace HairSalon.Test
         }
         public void Dispose()
         {
-            
+            Client.DeleteAll();
+            Stylist.DeleteAll();
         }
 
         [TestMethod]
-        public void TestTest()
-        {
-            List<List<Stylist>> newListOfLists = new List<List<Stylist>>{};
-             List<Client> newClientList = new List<Client>{};
-             newClientList = Client.GetAllClients();
-             foreach(var client in newClientList)
-             {
-                 newListOfLists.Add(client.GetStylist());
-             }
-             foreach(var List in newListOfLists)
-             {
-                 foreach(var stylist in List)
-                 {
-                     System.Console.WriteLine(stylist.Name);
-                 }
-             }
-
-        }
-        [TestMethod]
-        public void TestClient()
+        public void ClientSave_CheckQuantity_ReturnsTrue()
         {
             int id = 0;
             string name = "";
@@ -60,6 +42,36 @@ namespace HairSalon.Test
             }
             Assert.AreEqual(id, newClient.Id);
             Assert.AreEqual(name, newClient.Name);
+        }
+        [TestMethod]
+        public void StylistSaveThenDelete_CheckQuantity_ReturnsNone()
+        {
+            int id = 0;
+            string name = "";
+            Stylist newStylist = new Stylist("Joe Schmo", id, true);
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM stylist WHERE name = 'Joe Schmo';";
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while(rdr.Read())
+            {
+                name = rdr.GetString(1);
+                id = rdr.GetInt32(0);
+            }
+
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+            int stylistQuantity = (Stylist.GetAllStylist()).Count;
+            Assert.AreEqual(1, stylistQuantity);
+            Assert.AreEqual(id, newStylist.Id);
+            Assert.AreEqual(name, newStylist.Name);
+            Stylist.DeleteAll();
+            stylistQuantity = (Stylist.GetAllStylist()).Count;
+            Assert.AreEqual(0, stylistQuantity);
         }
     }
 }

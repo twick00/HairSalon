@@ -53,6 +53,21 @@ namespace HairSalon.Models
                 conn.Dispose();
             }
         }
+        public void DeleteThis()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE id FROM `client`  WHERE id = @thisId;";
+            MySqlParameter thisId = new MySqlParameter("@thisId", this._id);
+            cmd.Parameters.Add(thisId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+        }
 
         public static Client FindClient(int id)
         {
@@ -73,6 +88,23 @@ namespace HairSalon.Models
             cmd.CommandText = @"UPDATE client_stylist SET stylist_id = @newStylist WHERE client_id = @clientID;";
             MySqlParameter newStylistId = new MySqlParameter("@newStylist", stylistID);
             MySqlParameter clientId = new MySqlParameter("@clientId", clientID);
+            cmd.Parameters.Add(newStylistId);
+            cmd.Parameters.Add(clientId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+        public void NewClientStylistRel(int stylistId)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO `client_stylist` (`client_id`, `stylist_id`) VALUES (@clientId, @newStylist);";
+            MySqlParameter newStylistId = new MySqlParameter("@newStylist", stylistId);
+            MySqlParameter clientId = new MySqlParameter("@clientId", _id);
             cmd.Parameters.Add(newStylistId);
             cmd.Parameters.Add(clientId);
             cmd.ExecuteNonQuery();
@@ -125,7 +157,6 @@ namespace HairSalon.Models
                 allClients.Add(newClient);
             }
             _allClients = allClients;
-            Client_Stylist.SetClient(allClients);
             conn.Close();
             if(conn != null)
             {
