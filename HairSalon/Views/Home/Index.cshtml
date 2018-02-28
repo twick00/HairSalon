@@ -16,14 +16,10 @@
                     <div class="collapse" id="collapse-stylist-@Stylist.Id">
                         <div class="well">
                         <ul class="list-group">
-                        @{
-                            List<Client> test = Stylist.linkedClients();
-                            System.Console.WriteLine(test);
-                            foreach(var client in test)
+                            @foreach(var client in Stylist.GetClients())
                             {
                                 <li class="list-group-item">@client.Name</li>
                             }
-                        }
                         </ul>
                         </div>
                     </div>
@@ -49,9 +45,9 @@
                     <div class="collapse" id="collapse-client-@Client.Id">
                         <div class="well">
                         <ul class="list-group">
-                           @foreach(var Stylist in @Client.linkedStylists())
+                           @foreach(var client in Client.GetStylist())
                            {
-                               <li class="list-group-item">@Stylist.Name</li>
+                               <li class="list-group-item">@client.Name</li>
                            }
                         </ul>
                         </div>

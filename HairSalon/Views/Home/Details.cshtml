@@ -3,7 +3,13 @@
     {
         @if (Model.GetType() == typeof(Client))
         {
-            <h4>Client: @Model.Name</h4>
+            <h4>Client: <br>@Model.Name <br>Stylist: @foreach(var stylist in Model.GetStylist()){<p>@stylist.Name</p>}
+            </h4>
+            <h4>Pick a different Stylist:</h4>
+            foreach(var stylist in ViewBag.Stylists)
+            {
+                <a href="/client/editstylist/@Model.Id/@stylist.Id">@stylist.Name</a><br>
+            }
         }
         else if (Model.GetType() == typeof(Stylist))
         {

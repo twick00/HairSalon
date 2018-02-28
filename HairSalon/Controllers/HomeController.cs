@@ -22,7 +22,7 @@ namespace HairSalon.Controllers
         [HttpGet("/client/{id}")]
         public IActionResult ViewClient(int id)
         {
-
+            ViewBag.Stylists = Stylist.GetAllStylist();
             
             return View("Details",Client.FindClient(id));
         }
@@ -32,7 +32,12 @@ namespace HairSalon.Controllers
             
             return View("Details",Stylist.FindStylist(id));
         }
-
+        [HttpGet("/client/editstylist/{client_id}/{stylist_id}")]
+        public IActionResult EditClientStylist(int client_id, int stylist_id)
+        {
+            Client.ChangeThisStylist(client_id, stylist_id);
+            return View("Details",client_id);
+        }
         public IActionResult ViewStylist()
         {
 

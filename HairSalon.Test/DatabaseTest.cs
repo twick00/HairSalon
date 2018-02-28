@@ -22,10 +22,10 @@ namespace HairSalon.Test
 
         public void DeleteAll()
         {
-            Stylist.DeleteAll();
-            Client.DeleteAll();
+            //Stylist.DeleteAll();
+            //Client.DeleteAll();
         }
-        [TestMethod]
+        //[TestMethod]
         public void RestoreDatabase()
         {
             MySqlConnection conn = DB.Connection();

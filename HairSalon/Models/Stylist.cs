@@ -55,13 +55,7 @@ namespace HairSalon.Models
                 conn.Dispose();
             }
         }
-        public List<Client> linkedClients()
-        {
-            System.Console.WriteLine("---------------------------------------");
-            System.Console.WriteLine("ID: "+this._id);
-            _linkedClients = Client_Stylist.FindClientByStylistId(this._id);
-            return _linkedClients;
-        }
+
         public static Stylist FindStylist(int id)
         {
             foreach(Stylist stylist in _allStylists)
@@ -72,6 +66,33 @@ namespace HairSalon.Models
                 }
             }
             return null;
+        }
+        public List<Client> GetClients()
+        {
+            List<Client> newClients = new List<Client>{};
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT client.* FROM client JOIN client_stylist ON (client.id = client_stylist.client_id) JOIN stylist ON (client_stylist.stylist_id = stylist.id) WHERE client_stylist.stylist_id = @ThisID;";
+            MySqlParameter thisId = new MySqlParameter();
+            thisId.ParameterName = "@ThisID";
+            thisId.Value = this._id;
+            cmd.Parameters.Add(thisId);
+            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while (rdr.Read())
+            {
+                int id = rdr.GetInt32(0);
+                string name = rdr.GetString(1);
+                Client newClient = new Client(name, id);
+                newClients.Add(newClient);
+            }
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
+            return newClients;
         }
         public static List<Stylist> GetAllStylist()
         {
