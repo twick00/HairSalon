@@ -59,10 +59,10 @@ namespace HairSalon.Controllers
         [HttpPost("/client/editstylist/{id}")]
         public IActionResult EditClientStylist(int id)
         {
-            if (string.IsNullOrEmpty(Request.Form["new-stylist"]))
-            {
-                return View("Index");
-            }
+            // if (string.IsNullOrEmpty(Request.Form["new-stylist"]))
+            // {
+            //     return View("Index");
+            // }
             int newStylistId = Int32.Parse(Request.Form["new-stylist"]);
             Client.ChangeThisStylist(id, newStylistId);
             return RedirectToAction("Index");
