@@ -90,9 +90,6 @@ namespace HairSalon.Models
         }
         public static void ChangeThisStylist(int clientID, int stylistID)
         {
-            System.Console.WriteLine("---------------------------------------");
-            System.Console.WriteLine(clientID);
-            System.Console.WriteLine(stylistID);
             MySqlConnection conn = DB.Connection();
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
@@ -132,7 +129,10 @@ namespace HairSalon.Models
             conn.Open();
 
             MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"SELECT stylist.* FROM stylist JOIN client_stylist ON (stylist.id = client_stylist.stylist_id) JOIN client ON (client_stylist.client_id = client.id) WHERE client_stylist.client_id = @ThisID;";
+            cmd.CommandText = @"SELECT stylist.* FROM stylist 
+            JOIN client_stylist ON (stylist.id = client_stylist.stylist_id) 
+            JOIN client ON (client_stylist.client_id = client.id) 
+            WHERE client_stylist.client_id = @ThisID;";
             MySqlParameter thisId = new MySqlParameter();
             thisId.ParameterName = "@ThisID";
             thisId.Value = this._id;
@@ -173,6 +173,23 @@ namespace HairSalon.Models
                 conn.Dispose();
             }
             return  allClients;
+        }
+        public void ChangeName(string newName)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"UPDATE stylist SET name = @ClientNewName WHERE id = @ClientId;";
+            MySqlParameter ClientName = new MySqlParameter("@ClientNewName", newName);
+            MySqlParameter ClientId = new MySqlParameter("@ClientId", this._id);
+            cmd.Parameters.Add( ClientName);
+            cmd.Parameters.Add(ClientId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if(conn != null)
+            {
+                conn.Dispose();
+            }
         }
     }
 }

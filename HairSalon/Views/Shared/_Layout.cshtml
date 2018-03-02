@@ -17,14 +17,25 @@
     </environment>
 </head>
 <body style="padding-top: 0px">
+    <div class="container">
     <nav class="navbar navbar-default">
         <div class="navbar-header">
       <a class="navbar-brand" href="/">Home</a>
       <a class="navbar-brand" href="/addnew">Add New</a>
     </div>
+      <form class="navbar-form navbar-right" style="padding-left: 0px; margin-right:1px;" action="/client/deleteall" method="POST">
+      <div class="pull-right">
+          <button type="submit" class="btn btn-default">Delete All Clients</button>
+      </div>
+      </form>
+      <form class="navbar-form navbar-right" action="/stylist/deleteall" method="POST">
+      <button type="submit" class="btn btn-default">Delete All Stylists</button>
+      </form>
 
     </nav>
+    </div>
     @RenderBody()
     @RenderSection("Scripts", required: false)
+    
 </body>
 </html>
