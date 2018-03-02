@@ -8,13 +8,10 @@ namespace HairSalon.Models
     {
         private int _id;
         private string _name;
-        private static List<Stylist> _allStylists;
-        private List<Client> _linkedClients;
         public int Id { get => _id; }
         private int _Id { set => _id = value; }
         public string Name { get => _name; }
         private string _Name { set => _name = value; }
-
         public Stylist(string name, int id = 0, bool save = false)
         {
             this._Name = name;
@@ -73,14 +70,23 @@ namespace HairSalon.Models
 
         public static Stylist FindStylist(int id)
         {
-            foreach(Stylist stylist in _allStylists)
+            int ID = 0;
+            string name = "";
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM stylist WHERE id = @StylistId;";
+            MySqlParameter stylistId = new MySqlParameter("@StylistId", id);
+            cmd.Parameters.Add(stylistId);
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while (rdr.Read())
             {
-                if (stylist._id == id)
-                {
-                    return stylist;
-                }
+                ID = rdr.GetInt32(0);
+                name = rdr.GetString(1);
             }
-            return null;
+            Stylist newStylist = new Stylist(name, ID);
+            return newStylist;
         }
         public List<Client> GetClients()
         {
@@ -90,9 +96,7 @@ namespace HairSalon.Models
 
             MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
             cmd.CommandText = @"SELECT client.* FROM client JOIN client_stylist ON (client.id = client_stylist.client_id) JOIN stylist ON (client_stylist.stylist_id = stylist.id) WHERE client_stylist.stylist_id = @ThisID;";
-            MySqlParameter thisId = new MySqlParameter();
-            thisId.ParameterName = "@ThisID";
-            thisId.Value = this._id;
+            MySqlParameter thisId = new MySqlParameter("@ThisID", this._id);
             cmd.Parameters.Add(thisId);
             var rdr = cmd.ExecuteReader() as MySqlDataReader;
             while (rdr.Read())
@@ -124,7 +128,6 @@ namespace HairSalon.Models
                 Stylist newStylist = new Stylist(name, id);
                 allStylists.Add(newStylist);
             }
-            _allStylists = allStylists;
             conn.Close();
             if(conn != null)
             {

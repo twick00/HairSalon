@@ -11,19 +11,24 @@
         @foreach(var Stylist in ViewBag.Stylists)
         {
             <li class="list-group-item">
-            <button class="btn btn-primary btn-xs push-right" type="button" data-toggle="collapse" data-target="#collapse-stylist-@Stylist.Id" aria-expanded="false" aria-controls="collapseExample">Show Stylists</button>
+            <button class="btn btn-primary btn-xs push-right" type="button" data-toggle="collapse" data-target="#collapse-stylist-@Stylist.Id" aria-expanded="false" aria-controls="collapseExample">Show Clients</button>
                 <a href="/stylist/@Stylist.Id">@Stylist.Name</a>
-                    <div class="collapse" id="collapse-stylist-@Stylist.Id">
-                        <div class="well">
+                <span class="pull-right">
+                    <form name="delete-stylist" action="/stylist/@Stylist.Id/delete" method="POST">
+                    <button type="submit" class="btn btn-sm glyphicon glyphicon-remove" style="padding:1px 4px;" aria-hidden="true"></button>
+                    </form>
+                </span>
+                <div class="collapse" id="collapse-stylist-@Stylist.Id">
+                    <div class="well">
                         <ul class="list-group">
                             @foreach(var client in Stylist.GetClients())
                             {
                                 <li class="list-group-item">@client.Name</li>
                             }
                         </ul>
-                        </div>
                     </div>
-                </li>
+                </div>
+            </li>
         }
         </ul>
     </div>
@@ -32,7 +37,6 @@
         <h3>No Stylists to show</h3>
         </div>
     }
-    <hr>
     @if (ViewBag.Clients != null)
     {
     <div class="col-md-6">
@@ -43,6 +47,11 @@
                 <li class="list-group-item">
                     <button class="btn btn-primary btn-xs push-right" type="button" data-toggle="collapse" data-target="#collapse-client-@Client.Id" aria-expanded="false" aria-controls="collapseExample">Show Stylists</button>
                 <a href="/client/@Client.Id">@Client.Name<a href="/client/@Client.Id"></a>
+                  <span class="pull-right">
+                    <form name="delete-stylist" action="/client/@Client.Id/delete" method="POST">
+                    <button type="submit" class="btn btn-sm glyphicon glyphicon-remove" style="padding:1px 4px;" aria-hidden="true"></button>
+                    </form>
+                </span>
                     <div class="collapse" id="collapse-client-@Client.Id">
                         <div class="well">
                         <ul class="list-group">

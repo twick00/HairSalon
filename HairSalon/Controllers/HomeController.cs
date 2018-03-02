@@ -59,12 +59,27 @@ namespace HairSalon.Controllers
         [HttpPost("/client/editstylist/{id}")]
         public IActionResult EditClientStylist(int id)
         {
-            // if (string.IsNullOrEmpty(Request.Form["new-stylist"]))
-            // {
-            //     return View("Index");
-            // }
+            if (string.IsNullOrEmpty(Request.Form["new-stylist"]))
+            {
+                return View("Index");
+            }
             int newStylistId = Int32.Parse(Request.Form["new-stylist"]);
             Client.ChangeThisStylist(id, newStylistId);
+            return RedirectToAction("Index");
+        }
+        [HttpPost("/client/{id}/delete")]
+        public IActionResult DeleteClient(int id)
+        {
+            Client foundClient = Client.FindClient(id);
+            foundClient.DeleteThis();
+            return RedirectToAction("Index");
+        }
+        [HttpPost("/stylist/{id}/delete")]
+        public IActionResult DeleteStylist(int id)
+        {
+            System.Console.WriteLine("-------------------------------------------------");
+            Stylist foundStylist = Stylist.FindStylist(id);
+            foundStylist.DeleteThis();
             return RedirectToAction("Index");
         }
     }
