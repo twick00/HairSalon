@@ -16,9 +16,11 @@ namespace HairSalon.Controllers
 
             ViewBag.Clients = Client.GetAllClients();
             ViewBag.Stylists = Stylist.GetAllStylist();
+            ViewBag.Specialty = Specialty.GetAllSpecialties();
             
             return View();
         }
+
         [HttpGet("/addnew")]
         public IActionResult NewPerson()
         {
@@ -26,6 +28,7 @@ namespace HairSalon.Controllers
             ViewBag.Stylists = Stylist.GetAllStylist();
             return View();
         }
+
         [HttpPost("/addnew")]
         public IActionResult PostNewPerson()
         {
@@ -38,69 +41,15 @@ namespace HairSalon.Controllers
                 Client newClient = new Client(Request.Form["name"],0,true);
                 newClient.NewClientStylistRel(Int32.Parse(Request.Form["stylist"]));
             }
+            else if (Request.Form["person"] == "specialty")
+            {
+                Specialty newSpecialty = new Specialty(Request.Form["name"],0,true);
+            }
             else {
                 return RedirectToAction("PostNewPerson");
             }
             return RedirectToAction("Index");
         }
-        [HttpGet("/client/{id}")]
-        public IActionResult ViewClient(int id)
-        {
-            ViewBag.Stylists = Stylist.GetAllStylist();
-            
-            return View("Details",Client.FindClient(id));
-        }
-        [HttpGet("/stylist/{id}")]
-        public IActionResult ViewStylist(int id)
-        {
-            
-            return View("Details",Stylist.FindStylist(id));
-        }
-        [HttpPost("/client/editstylist/{id}")]
-        public IActionResult EditClientStylist(int id)
-        {
-            if (string.IsNullOrEmpty(Request.Form["new-stylist"]))
-            {
-                return View("Index");
-            }
-            int newStylistId = Int32.Parse(Request.Form["new-stylist"]);
-            Client.ChangeThisStylist(id, newStylistId);
-            return RedirectToAction("Index");
-        }
-        [HttpPost("/client/{id}/delete")]
-        public IActionResult DeleteClient(int id)
-        {
-            Client foundClient = Client.FindClient(id);
-            foundClient.DeleteThis();
-            return RedirectToAction("Index");
-        }
-        [HttpPost("/stylist/{id}/delete")]
-        public IActionResult DeleteStylist(int id)
-        {
-            System.Console.WriteLine("-------------------------------------------------");
-            Stylist foundStylist = Stylist.FindStylist(id);
-            foundStylist.DeleteThis();
-            return RedirectToAction("Index");
-        }
-        [HttpPost("/stylist/deleteall")]
-        public IActionResult DeleteAllStylists()
-        {
-            Stylist.DeleteAll();
-            return RedirectToAction("Index");
-        }
-        [HttpPost("/client/deleteall")]
-        public IActionResult DeleteAllClients()
-        {
-            Client.DeleteAll();
-            return RedirectToAction("Index");
-        }
-        [HttpPost("/stylist/{id}/changename")]
-        public IActionResult ChangeStylistName(int id)
-        {
-            Stylist thisStylist = Stylist.FindStylist(id);
-            string result = Request.Form["new-name"];
-            thisStylist.ChangeName(result);
-            return RedirectToAction("Index");
-        }
+
     }
 }

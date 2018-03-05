@@ -15,6 +15,12 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+        <style>
+        .navbar-form {
+            padding-left: 0px; 
+            margin-right:1px;
+        }
+    </style>
 </head>
 <body style="padding-top: 0px">
     <div class="container">
@@ -23,14 +29,15 @@
       <a class="navbar-brand" href="/">Home</a>
       <a class="navbar-brand" href="/addnew">Add New</a>
     </div>
-      <form class="navbar-form navbar-right" style="padding-left: 0px; margin-right:1px;" action="/client/deleteall" method="POST">
-      <div class="pull-right">
-          <button type="submit" class="btn btn-default">Delete All Clients</button>
-      </div>
-      </form>
-      <form class="navbar-form navbar-right" action="/stylist/deleteall" method="POST">
-      <button type="submit" class="btn btn-default">Delete All Stylists</button>
-      </form>
+    <form class="navbar-form navbar-right" action="/client/deleteall" method="POST">
+    <button type="submit" class="btn btn-danger">Delete All Clients</button>
+    </form>
+    <form class="navbar-form navbar-right" action="/stylist/deleteall" method="POST">
+    <button type="submit" class="btn btn-danger">Delete All Stylists</button>
+    </form>
+    <form class="navbar-form navbar-right" action="/specialty/deleteall" method="POST">
+    <button type="submit" class="btn btn-danger">Delete All Specialties</button>
+    </form>
 
     </nav>
     </div>

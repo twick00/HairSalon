@@ -1,14 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Feb 28, 2018 at 01:41 AM
--- Server version: 5.6.35
--- PHP Version: 7.0.15
+-- Generation Time: Mar 04, 2018 at 05:41 PM
+-- Server version: 5.6.34-log
+-- PHP Version: 7.1.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `tyler_wickline_test`
@@ -22,22 +30,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `client` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `client`
---
-
-INSERT INTO `client` (`id`, `name`) VALUES
-(40, 'Joe Schmo'),
-(41, 'Tyler Wickline'),
-(42, 'Waylon Dalton\r\n'),
-(43, 'Marcus Cruz\r\n'),
-(44, 'Joe Schmo'),
-(45, 'Joe Schmo'),
-(46, 'Joe Schmo'),
-(47, 'Joe Schmo');
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -48,14 +42,31 @@ INSERT INTO `client` (`id`, `name`) VALUES
 CREATE TABLE `client_stylist` (
   `client_id` int(11) NOT NULL,
   `stylist_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `client_stylist`
+-- Table structure for table `specialty`
 --
 
-INSERT INTO `client_stylist` (`client_id`, `stylist_id`) VALUES
-(40, 119);
+CREATE TABLE `specialty` (
+  `id` int(11) NOT NULL,
+  `specialty_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `specialty_stylist`
+--
+
+CREATE TABLE `specialty_stylist` (
+  `id` int(11) NOT NULL,
+  `specialty_id` int(11) NOT NULL,
+  `stylist_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -65,17 +76,12 @@ INSERT INTO `client_stylist` (`client_id`, `stylist_id`) VALUES
 
 CREATE TABLE `stylist` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stylist`
 --
-
-INSERT INTO `stylist` (`id`, `name`) VALUES
-(119, 'Max Styles'),
-(120, 'Daniel Walls\r\n'),
-(121, 'Skyler Macdonald\r\n');
 
 --
 -- Indexes for dumped tables
@@ -91,8 +97,23 @@ ALTER TABLE `client`
 -- Indexes for table `client_stylist`
 --
 ALTER TABLE `client_stylist`
-  ADD KEY `client_id` (`client_id`,`stylist_id`),
-  ADD KEY `client_id_2` (`client_id`,`stylist_id`),
+  ADD PRIMARY KEY (`client_id`),
+  ADD KEY `client_id` (`client_id`),
+  ADD KEY `stylist_id` (`stylist_id`);
+
+--
+-- Indexes for table `specialty`
+--
+ALTER TABLE `specialty`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `specialty_stylist`
+--
+ALTER TABLE `specialty_stylist`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `specialty_id` (`specialty_id`),
   ADD KEY `stylist_id` (`stylist_id`);
 
 --
@@ -109,12 +130,22 @@ ALTER TABLE `stylist`
 -- AUTO_INCREMENT for table `client`
 --
 ALTER TABLE `client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `specialty`
+--
+ALTER TABLE `specialty`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `specialty_stylist`
+--
+ALTER TABLE `specialty_stylist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `stylist`
 --
 ALTER TABLE `stylist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- Constraints for dumped tables
 --
@@ -123,5 +154,17 @@ ALTER TABLE `stylist`
 -- Constraints for table `client_stylist`
 --
 ALTER TABLE `client_stylist`
-  ADD CONSTRAINT `client_stylist_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `client_stylist_ibfk_2` FOREIGN KEY (`stylist_id`) REFERENCES `stylist` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `client_stylist_ibfk_1` FOREIGN KEY (`stylist_id`) REFERENCES `stylist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `client_stylist_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `specialty_stylist`
+--
+ALTER TABLE `specialty_stylist`
+  ADD CONSTRAINT `specialty_stylist_ibfk_1` FOREIGN KEY (`stylist_id`) REFERENCES `stylist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `specialty_stylist_ibfk_2` FOREIGN KEY (`specialty_id`) REFERENCES `specialty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

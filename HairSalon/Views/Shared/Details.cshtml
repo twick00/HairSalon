@@ -14,7 +14,7 @@
                 @*<a href="/client/editstylist/@Model.Id/@stylist.Id">@stylist.Name</a><br>*@
             }
             <hr>
-            <input type="submit" value="Submit">
+             <button class="btn btn-primary" type="submit">Submit</button>
             </form>
         }
         else if (Model.GetType() == typeof(Stylist))
@@ -30,9 +30,38 @@
             <div class="form-group">
                 <input name="new-name" type="text" class="form-control" placeholder="@Model.Name">
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
             </form>
+            <hr>
+            <form action="/stylist/@Model.Id/addspecialty/" method="POST">
+                <select name="specialty">
+            @foreach(var specialty in ViewBag.AllSpecialties)
+            {
+                <option value="@specialty.Id">@specialty.SpecialtyName</option>
+            }
+                </select> 
+            <p></p>
+            <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+            <hr>
+            <h4>Specialties:</h4>
+            <ul>
+            @foreach(var specialty in Model.FindSpecialties())
+            {
+                <a href="/specialty/@specialty.Id"><li>@specialty.SpecialtyName</li></a>
+            }
+            </ul>
         }   
+        else if (Model.GetType() == typeof(Specialty))
+        {
+            @Model.SpecialtyName
+            <h3>Stylists with this specialty:</h3>
+            foreach(var stylist in Model.GetStylist())
+            {
+                <br>
+                @stylist.Name
+            }
+        }
         else {
             <h4>Oops</h4>
         }
